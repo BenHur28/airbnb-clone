@@ -9,7 +9,11 @@ const Register = () => {
 
 	const register = async (e) => {
 		e.preventDefault();
-		await axios.get("http://localhost:3000/test");
+		await axios.post("/register", {
+			name: name,
+			email: email,
+			password: password,
+		});
 	};
 
 	return (
