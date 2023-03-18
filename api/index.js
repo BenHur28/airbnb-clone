@@ -7,8 +7,9 @@ const jwt = require("jsonwebtoken");
 const cookieparser = require("cookie-parser");
 const mongoose = require("mongoose");
 const UserModel = require("./models/User");
-const PORT = 3000;
+const PlaceModel = require("./models/Place");
 
+const PORT = 3000;
 const bcryptSalt = bcrypt.genSaltSync(12);
 const jwtSecret = process.env.JWT_SECRET;
 
@@ -23,7 +24,7 @@ app.use(
 
 mongoose.connect(process.env.MONGO_URL);
 
-app.get("/test", (req, res) => {
+app.get("/", (req, res) => {
 	res.json("TEST OK");
 });
 
@@ -75,6 +76,8 @@ app.get("/profile", (req, res) => {
 app.post("/logout", (req, res) => {
 	res.cookie("token", "").json(true);
 });
+
+app.post("/");
 
 app.listen(PORT, function (err) {
 	if (err) console.log(err);

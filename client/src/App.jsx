@@ -27,14 +27,10 @@ const router = createBrowserRouter([
 		path: "/account/:subpage?",
 		element: <AccountPage />,
 	},
-	// {
-	// 	path: "/account/bookings",
-	// 	element: <AccountPage />,
-	// },
-	// {
-	// 	path: "/account/places",
-	// 	element: <AccountPage />,
-	// },
+	{
+		path: "/account/:subpage/:action",
+		element: <AccountPage />,
+	},
 ]);
 
 function App() {
