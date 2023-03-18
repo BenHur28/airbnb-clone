@@ -3,6 +3,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import IndexPage from "./pages/IndexPage";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
+import AccountPage from "./pages/AccountPage";
 import axios from "axios";
 import { UserContextProvider } from "./components/UserContext";
 
@@ -22,6 +23,18 @@ const router = createBrowserRouter([
 		path: "/register",
 		element: <RegisterPage />,
 	},
+	{
+		path: "/account/:subpage?",
+		element: <AccountPage />,
+	},
+	// {
+	// 	path: "/account/bookings",
+	// 	element: <AccountPage />,
+	// },
+	// {
+	// 	path: "/account/places",
+	// 	element: <AccountPage />,
+	// },
 ]);
 
 function App() {

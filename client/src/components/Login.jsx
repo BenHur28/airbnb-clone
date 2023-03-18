@@ -12,9 +12,13 @@ const Login = () => {
 		e.preventDefault();
 		try {
 			const response = await axios.post("/login", { email, password }, { withCredentials: true });
-			setUser(response.data);
-			alert("Login successful");
-			setRedirect(true);
+			if (response.data != "not found") {
+				setUser(response.data);
+				alert("Login successful");
+				setRedirect(true);
+			} else {
+				alert("Login failed");
+			}
 		} catch (e) {
 			alert("Login failed");
 		}

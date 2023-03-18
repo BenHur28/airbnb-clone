@@ -1,13 +1,14 @@
 import React from "react";
 import Header from "../components/Header";
+import Account from "../components/Account";
 
-const IndexPage = () => {
+const AccountPage = () => {
 	return (
 		<div>
 			<Header />
-			index page
+			<Account />
 		</div>
 	);
 };
 
-export default IndexPage;
+export default AccountPage;
