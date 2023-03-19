@@ -5,6 +5,7 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cookieparser = require("cookie-parser");
+const download = require("image-downloader");
 const mongoose = require("mongoose");
 const UserModel = require("./models/User");
 const PlaceModel = require("./models/Place");
@@ -15,6 +16,7 @@ const jwtSecret = process.env.JWT_SECRET;
 
 app.use(express.json());
 app.use(cookieparser());
+app.use("/uploads", express.static(__dirname + "/uploads"));
 app.use(
 	cors({
 		credentials: true,
@@ -77,7 +79,15 @@ app.post("/logout", (req, res) => {
 	res.cookie("token", "").json(true);
 });
 
-app.post("/");
+app.post("/upload-by-link", async (req, res) => {
+	const { link } = req.body;
+	const newName = "photo" + Date.now() + ".jpg";
+	await download.image({
+		url: link,
+		dest: __dirname + "/uploads/" + newName,
+	});
+	res.json(newName);
+});
 
 app.listen(PORT, function (err) {
 	if (err) console.log(err);
