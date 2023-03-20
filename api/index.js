@@ -5,6 +5,9 @@ const cors = require("cors");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const cookieparser = require("cookie-parser");
+const multer = require("multer");
+const fs = require("fs");
+
 const download = require("image-downloader");
 const mongoose = require("mongoose");
 const UserModel = require("./models/User");
@@ -87,6 +90,21 @@ app.post("/upload-by-link", async (req, res) => {
 		dest: __dirname + "/uploads/" + newName,
 	});
 	res.json(newName);
+});
+
+const photosMiddleware = multer({ dest: "uploads/" });
+app.post("/upload", photosMiddleware.array("photos", 100), async (req, res) => {
+	const uploadedFiles = [];
+	for (let i = 0; i < req.files.length; i++) {
+		const { path, originalname } = req.files[i];
+		const parts = originalname.split(".");
+		const path2 = path.split(String.fromCharCode(92));
+		const ext = parts[parts.length - 1];
+		const newPath = path2[0] + "/" + path2[1] + "." + ext;
+		fs.renameSync(path, newPath);
+		uploadedFiles.push(newPath.replace("uploads/", ""));
+	}
+	res.json(uploadedFiles);
 });
 
 app.listen(PORT, function (err) {
