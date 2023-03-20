@@ -85,11 +85,15 @@ app.post("/logout", (req, res) => {
 app.post("/upload-by-link", async (req, res) => {
 	const { link } = req.body;
 	const newName = "photo" + Date.now() + ".jpg";
-	await download.image({
-		url: link,
-		dest: __dirname + "/uploads/" + newName,
-	});
-	res.json(newName);
+	try {
+		await download.image({
+			url: link,
+			dest: __dirname + "/uploads/" + newName,
+		});
+		res.json(newName);
+	} catch (e) {
+		console.log(e);
+	}
 });
 
 const photosMiddleware = multer({ dest: "uploads/" });
@@ -105,6 +109,27 @@ app.post("/upload", photosMiddleware.array("photos", 100), async (req, res) => {
 		uploadedFiles.push(newPath.replace("uploads/", ""));
 	}
 	res.json(uploadedFiles);
+});
+
+app.post("/places", async (req, res) => {
+	const { title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests } = req.body;
+	const { token } = req.cookies;
+	jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+		if (err) throw err;
+		const place = await PlaceModel.create({
+			owner: userData.id,
+			title,
+			address,
+			addedPhotos,
+			description,
+			perks,
+			extraInfo,
+			checkIn,
+			checkOut,
+			maxGuests,
+		});
+		res.json(place);
+	});
 });
 
 app.listen(PORT, function (err) {
