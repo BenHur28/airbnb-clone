@@ -37,6 +37,10 @@ const router = createBrowserRouter([
 		path: "/account/places/new",
 		element: <PlacesFormPage />,
 	},
+	{
+		path: "/account/places/:id",
+		element: <PlacesFormPage />,
+	},
 ]);
 
 function App() {

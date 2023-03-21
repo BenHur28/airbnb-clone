@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Perks from "../components/Perks";
 import PhotosUploader from "../components/PhotosUploader";
 import axios from "axios";
 import AccountNav from "../components/AccountNav";
 import Header from "../components/Header";
-import { Navigate } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 
 const PlacesFormPage = () => {
+	const { id } = useParams();
 	const [title, setTitle] = useState("");
 	const [address, setAddress] = useState("");
 	const [addedPhotos, setAddedPhotos] = useState([]);
@@ -17,6 +18,25 @@ const PlacesFormPage = () => {
 	const [checkOut, setCheckOut] = useState("");
 	const [maxGuests, setMaxGuests] = useState(1);
 	const [redirect, setRedirect] = useState(false);
+
+	useEffect(() => {
+		if (!id) {
+			return;
+		}
+		axios.get("/places/" + id).then((response) => {
+			const { data } = response;
+			setTitle(data.title);
+			setAddress(data.address);
+			setAddedPhotos(data.photos);
+			setDescription(data.description);
+			setPerks(data.perks);
+			setExtraInfo(data.extraInfo);
+			setCheckIn(data.checkIn);
+			setCheckOut(data.checkOut);
+			setMaxGuests(data.maxGuests);
+		});
+	}, [id]);
+
 	const inputHeader = (text) => {
 		return <h2 className="text-xl mt-4">{text}</h2>;
 	};
@@ -34,11 +54,16 @@ const PlacesFormPage = () => {
 		);
 	};
 
-	const addNewPlace = async (e) => {
+	const savePlace = async (e) => {
 		e.preventDefault();
-		const placeData = { title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests };
-		await axios.post("/places", placeData);
-		setRedirect(true);
+		const placeData = { id, title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests };
+		if (id) {
+			await axios.put("/places/", placeData);
+			setRedirect(true);
+		} else {
+			await axios.post("/places", placeData);
+			setRedirect(true);
+		}
 	};
 
 	if (redirect) {
@@ -49,7 +74,7 @@ const PlacesFormPage = () => {
 		<div>
 			<Header />
 			<AccountNav />
-			<form className="max-w-7xl mx-auto mt-12" onSubmit={addNewPlace}>
+			<form className="max-w-7xl mx-auto mt-12" onSubmit={savePlace}>
 				{header("Title", "Title for your place. Should be short and catchy like an advertisement.")}
 				<input
 					className="w-full border my-2 py-2 px-3 rounded-2xl"
@@ -69,11 +94,11 @@ const PlacesFormPage = () => {
 				{header("Photos", "More is better")}
 				<PhotosUploader addedPhotos={addedPhotos} onChange={setAddedPhotos} />
 				{header("Description", "Description of the place")}
-				<textarea className="w-1/2 border my-2 py-2 px-3 rounded-2xl" rows="5" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
+				<textarea className="w-3/4 border my-2 py-2 px-3 rounded-2xl" rows="5" value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
 				{header("Perks", "Select all the perks of your place.")}
 				<Perks selected={perks} onChange={setPerks} />
 				{header("Extra info", "House rules, etc")}
-				<textarea className="w-1/2 border my-2 py-2 px-3 rounded-2xl" rows="5" value={extraInfo} onChange={(e) => setExtraInfo(e.target.value)}></textarea>
+				<textarea className="w-3/4 border my-2 py-2 px-3 rounded-2xl" rows="5" value={extraInfo} onChange={(e) => setExtraInfo(e.target.value)}></textarea>
 				{header("Check in & out times, max guests", "add check in and out times, remember to have time window for cleaning between guests")}
 				<div className="grid sm:grid-cols-3 gap-4">
 					<div>
