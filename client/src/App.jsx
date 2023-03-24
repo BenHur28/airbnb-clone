@@ -8,6 +8,7 @@ import axios from "axios";
 import { UserContextProvider } from "./components/UserContext";
 import PlacesPage from "./pages/PlacesPage";
 import PlacesFormPage from "./pages/PlacesFormPage";
+import SinglePlacePage from "./pages/SinglePlacePage";
 
 axios.defaults.baseURL = "http://127.0.0.1:3000";
 axios.defaults.withCredentials = true;
@@ -40,6 +41,10 @@ const router = createBrowserRouter([
 	{
 		path: "/account/places/:id",
 		element: <PlacesFormPage />,
+	},
+	{
+		path: "/place/:id",
+		element: <SinglePlacePage />,
 	},
 ]);
 
