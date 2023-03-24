@@ -7,13 +7,13 @@ import axios from "axios";
 const PlacesPage = () => {
 	const [places, setPlaces] = useState([]);
 	useEffect(() => {
-		axios.get("/places").then(({ data }) => {
+		axios.get("/user-places").then(({ data }) => {
 			setPlaces(data);
 		});
 	}, []);
 
 	return (
-		<div>
+		<div className="py-4 px-8 flex flex-col min-h-screen">
 			<Header />
 			<AccountNav />
 			<div className="text-center mt-12">
@@ -27,9 +27,9 @@ const PlacesPage = () => {
 			<div className="mt-4">
 				{places.length > 0 &&
 					places.map((place, index) => (
-						<Link to={"/account/places/" + place._id} className="flex cursor-pointer bg-gray-100 gap-4 p-4 rounded-2xl" key={index}>
-							<div className="flex h-60 w-60 bg-gray-300 grow shrink-0">
-								{place.photos.length > 0 && <img className="object-cover" src={"http://localhost:3000/uploads/" + place.photos[0]} alt=""></img>}
+						<Link to={"/account/places/" + place._id} className="flex cursor-pointer bg-gray-100 gap-4 p-4 rounded-2xl mb-4" key={index}>
+							<div className="flex h-40 w-40 bg-gray-300 grow shrink-0">
+								{place.photos.length > 0 && <img className="object-cover aspect-square " src={"http://localhost:3000/uploads/" + place.photos[0]} alt=""></img>}
 							</div>
 							<div className="grow-0 shrink">
 								<h2 className="text-xl">{place.title}</h2>

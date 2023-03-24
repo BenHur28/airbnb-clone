@@ -17,6 +17,7 @@ const PlacesFormPage = () => {
 	const [checkIn, setCheckIn] = useState("");
 	const [checkOut, setCheckOut] = useState("");
 	const [maxGuests, setMaxGuests] = useState(1);
+	const [price, setPrice] = useState(100);
 	const [redirect, setRedirect] = useState(false);
 
 	useEffect(() => {
@@ -34,6 +35,7 @@ const PlacesFormPage = () => {
 			setCheckIn(data.checkIn);
 			setCheckOut(data.checkOut);
 			setMaxGuests(data.maxGuests);
+			setPrice(data.price);
 		});
 	}, [id]);
 
@@ -56,7 +58,7 @@ const PlacesFormPage = () => {
 
 	const savePlace = async (e) => {
 		e.preventDefault();
-		const placeData = { id, title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests };
+		const placeData = { id, title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests, price };
 		if (id) {
 			await axios.put("/places/", placeData);
 			setRedirect(true);
@@ -71,7 +73,7 @@ const PlacesFormPage = () => {
 	}
 
 	return (
-		<div>
+		<div className="py-4 px-8 flex flex-col min-h-screen">
 			<Header />
 			<AccountNav />
 			<form className="max-w-7xl mx-auto mt-12" onSubmit={savePlace}>
@@ -100,7 +102,7 @@ const PlacesFormPage = () => {
 				{header("Extra info", "House rules, etc")}
 				<textarea className="w-3/4 border my-2 py-2 px-3 rounded-2xl" rows="5" value={extraInfo} onChange={(e) => setExtraInfo(e.target.value)}></textarea>
 				{header("Check in & out times, max guests", "add check in and out times, remember to have time window for cleaning between guests")}
-				<div className="grid sm:grid-cols-3 gap-4">
+				<div className="grid grid-cols-2 md:grid-cols-4 gap-2">
 					<div>
 						<h3>Check in time</h3>
 						<input
@@ -129,6 +131,16 @@ const PlacesFormPage = () => {
 							placeholder="8"
 							value={maxGuests}
 							onChange={(e) => setMaxGuests(e.target.value)}
+						/>
+					</div>
+					<div>
+						<h3>Price per night</h3>
+						<input
+							className="w-full border my-2 py-2 px-3 rounded-2xl"
+							type="number"
+							placeholder="100"
+							value={price}
+							onChange={(e) => setPrice(e.target.value)}
 						/>
 					</div>
 				</div>

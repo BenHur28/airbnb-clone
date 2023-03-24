@@ -4,7 +4,7 @@ import Login from "../components/Login";
 
 const LoginPage = () => {
 	return (
-		<div className="flex flex-col min-h-screen">
+		<div className="py-4 px-8 flex flex-col min-h-screen">
 			<Header />
 			<Login />
 		</div>

@@ -111,8 +111,12 @@ app.post("/upload", photosMiddleware.array("photos", 100), async (req, res) => {
 	res.json(uploadedFiles);
 });
 
+app.get("/places", async (req, res) => {
+	res.json(await PlaceModel.find());
+});
+
 app.post("/places", async (req, res) => {
-	const { title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests } = req.body;
+	const { title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests, price } = req.body;
 	const { token } = req.cookies;
 	jwt.verify(token, jwtSecret, {}, async (err, userData) => {
 		if (err) throw err;
@@ -127,27 +131,14 @@ app.post("/places", async (req, res) => {
 			checkIn,
 			checkOut,
 			maxGuests,
+			price,
 		});
 		res.json(place);
 	});
 });
 
-app.get("/places", async (req, res) => {
-	const { token } = req.cookies;
-	jwt.verify(token, jwtSecret, {}, async (err, userData) => {
-		if (err) throw err;
-		const { id } = userData;
-		res.json(await PlaceModel.find({ owner: id }));
-	});
-});
-
-app.get("/places/:id", async (req, res) => {
-	const { id } = req.params;
-	res.json(await PlaceModel.findById(id));
-});
-
 app.put("/places/", async (req, res) => {
-	const { id, title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests } = req.body;
+	const { id, title, address, addedPhotos, description, perks, extraInfo, checkIn, checkOut, maxGuests, price } = req.body;
 	const { token } = req.cookies;
 	jwt.verify(token, jwtSecret, {}, async (err, userData) => {
 		if (err) throw err;
@@ -163,10 +154,25 @@ app.put("/places/", async (req, res) => {
 				checkIn,
 				checkOut,
 				maxGuests,
+				price,
 			});
 			await place.save();
 			res.json("ok");
 		}
+	});
+});
+
+app.get("/places/:id", async (req, res) => {
+	const { id } = req.params;
+	res.json(await PlaceModel.findById(id));
+});
+
+app.get("/user-places", async (req, res) => {
+	const { token } = req.cookies;
+	jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+		if (err) throw err;
+		const { id } = userData;
+		res.json(await PlaceModel.find({ owner: id }));
 	});
 });
 

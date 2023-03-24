@@ -4,7 +4,7 @@ import Account from "../components/Account";
 
 const AccountPage = () => {
 	return (
-		<div>
+		<div className="py-4 px-8 flex flex-col min-h-screen">
 			<Header />
 			<Account />
 		</div>
