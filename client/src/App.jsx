@@ -9,6 +9,8 @@ import { UserContextProvider } from "./components/UserContext";
 import PlacesPage from "./pages/PlacesPage";
 import PlacesFormPage from "./pages/PlacesFormPage";
 import SinglePlacePage from "./pages/SinglePlacePage";
+import BookingsPage from "./pages/BookingsPage";
+import BookingSinglePage from "./pages/BookingSinglePage";
 
 axios.defaults.baseURL = "http://127.0.0.1:3000";
 axios.defaults.withCredentials = true;
@@ -45,6 +47,14 @@ const router = createBrowserRouter([
 	{
 		path: "/place/:id",
 		element: <SinglePlacePage />,
+	},
+	{
+		path: "/account/bookings",
+		element: <BookingsPage />,
+	},
+	{
+		path: "/account/bookings/:id",
+		element: <BookingSinglePage />,
 	},
 ]);
 

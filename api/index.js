@@ -12,6 +12,7 @@ const download = require("image-downloader");
 const mongoose = require("mongoose");
 const UserModel = require("./models/User");
 const PlaceModel = require("./models/Place");
+const BookingModel = require("./models/Booking");
 
 const PORT = 3000;
 const bcryptSalt = bcrypt.genSaltSync(12);
@@ -173,6 +174,34 @@ app.get("/user-places", async (req, res) => {
 		if (err) throw err;
 		const { id } = userData;
 		res.json(await PlaceModel.find({ owner: id }));
+	});
+});
+
+app.post("/bookings", async (req, res) => {
+	const { place, checkIn, checkOut, maxGuests, name, phone, price } = req.body;
+	const { token } = req.cookies;
+	jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+		if (err) throw err;
+		const booking = await BookingModel.create({
+			place: place,
+			user: userData.id,
+			checkIn: checkIn,
+			checkOut: checkOut,
+			name: name,
+			phone: phone,
+			maxGuests: maxGuests,
+			price: price,
+		});
+		res.json(booking);
+	});
+});
+
+app.get("/bookings", async (req, res) => {
+	const { token } = req.cookies;
+	jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+		if (err) throw err;
+		const { id } = userData;
+		res.json(await BookingModel.find({ user: id }).populate("place"));
 	});
 });
 
