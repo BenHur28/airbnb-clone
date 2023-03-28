@@ -51,7 +51,7 @@ const SinglePlacePage = () => {
 	return (
 		<div className="py-4 px-8 flex flex-col min-h-screen">
 			<Header />
-			<div className="mt-4 bg-gray-100 -mx-8 px-8 pt-8">
+			<div className="mt-4 bg-gray-100 px-8 pt-8 w-2/3 mx-auto rounded-2xl">
 				<h1 className="text-3xl">{place.title}</h1>
 				<a className="flex mt-4 gap-1 my-2 font-semibold underline" target="_blank" href={"https://maps.google.com/?=" + place.address}>
 					<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" className="w-6 h-6">

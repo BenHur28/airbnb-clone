@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 
 const BookingsPage = () => {
 	const [bookings, setBookings] = useState([]);
+
 	useEffect(() => {
 		axios.get("/bookings").then(({ data }) => {
 			setBookings(data);
@@ -13,7 +14,7 @@ const BookingsPage = () => {
 	}, []);
 
 	return (
-		<div>
+		<div className="py-4 px-8 flex flex-col min-h-screen">
 			<Header />
 			{bookings?.length > 0 &&
 				bookings.map((booking, index) => (
